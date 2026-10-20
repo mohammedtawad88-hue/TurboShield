@@ -1,0 +1,44 @@
+{
+  "name": "turboshield",
+  "version": "1.0.0",
+  "description": "Ultra-fast, modern, 100% ad-free Windows cybersecurity shield, malware scanner, and USB virus doctor.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis"
+  },
+  "keywords": [
+    "antivirus",
+    "security",
+    "malware-scanner",
+    "usb-doctor",
+    "process-hunter",
+    "hosts-shield",
+    "turboshield"
+  ],
+  "author": "Mohammed Tawad",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.turboshield.app",
+    "productName": "TurboShield",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TurboShield"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

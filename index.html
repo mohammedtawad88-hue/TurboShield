@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TurboShield — Cybersecurity & Antivirus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Custom Titlebar -->
+  <div class="titlebar">
+    <div class="titlebar-drag">
+      <img src="assets/icon.png" alt="TurboShield" class="titlebar-icon">
+      <span class="titlebar-title">TurboShield <span class="version-tag">v1.0.0</span></span>
+      <div class="shield-status-pill">
+        <span class="pulse-dot"></span>
+        <span id="shield-status-text" data-i18n="statusProtected">Active Shield: Protected</span>
+      </div>
+    </div>
+    <div class="titlebar-actions">
+      <button id="lang-btn" class="lang-toggle-btn">
+        <span id="lang-text">العربية 🇮🇶</span>
+      </button>
+      <button class="win-btn" id="btn-min" title="Minimize">&#8211;</button>
+      <button class="win-btn" id="btn-max" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" id="btn-close" title="Close">&#10005;</button>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand-hero">
+        <div class="shield-emblem">
+          <img src="assets/icon.png" alt="Shield Logo">
+        </div>
+        <div class="brand-name">TurboShield</div>
+        <div class="brand-sub" data-i18n="tagline">Next-Gen Cybersecurity</div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="tab-scanner">
+          <span class="nav-icon">🛡️</span>
+          <span class="nav-label" data-i18n="navScanner">Threat Scanner</span>
+        </button>
+        <button class="nav-item" data-tab="tab-usb">
+          <span class="nav-icon">💾</span>
+          <span class="nav-label" data-i18n="navUsb">USB Doctor</span>
+          <span class="nav-badge" data-i18n="badgeHot">HOT</span>
+        </button>
+        <button class="nav-item" data-tab="tab-processes">
+          <span class="nav-icon">🕵️</span>
+          <span class="nav-label" data-i18n="navProcesses">Process Hunter</span>
+        </button>
+        <button class="nav-item" data-tab="tab-network">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-label" data-i18n="navNetwork">Network Shield</span>
+        </button>
+        <button class="nav-item" data-tab="tab-about">
+          <span class="nav-icon">ℹ️</span>
+          <span class="nav-label" data-i18n="navAbout">About & License</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="made-in-iraq">
+          <span>صُنع بأيادي عراقية</span> 🇮🇶
+        </div>
+        <div class="license-badge" data-i18n="badgeFree">100% Free & Open Source</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Tabs -->
+    <main class="main-content">
+      
+      <!-- TAB 1: THREAT SCANNER -->
+      <section id="tab-scanner" class="tab-pane active">
+        <div class="hero-status-card">
+          <div class="status-gauge-container">
+            <div class="status-shield-circle" id="main-shield-circle">
+              <span class="shield-glyph">🛡️</span>
+            </div>
+          </div>
+          <div class="status-info">
+            <h2 id="scanner-title" data-i18n="scannerTitle">System Protection Active</h2>
+            <p id="scanner-desc" data-i18n="scannerDesc">Deep heuristic and signature file audit for Trojans, Ransomware, and Malicious Scripts.</p>
+            <div class="status-metrics">
+              <div class="metric-pill">
+                <span class="metric-label" data-i18n="metricScanned">Files Scanned:</span>
+                <span class="metric-val" id="metric-scanned-count">0</span>
+              </div>
+              <div class="metric-pill">
+                <span class="metric-label" data-i18n="metricThreats">Threats Detected:</span>
+                <span class="metric-val text-green" id="metric-threats-count">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scan-actions-row">
+          <button class="btn btn-primary" id="btn-quick-scan">
+            <span class="btn-icon">⚡</span>
+            <span data-i18n="btnQuickScan">Run Quick Scan</span>
+          </button>
+          <button class="btn btn-secondary" id="btn-custom-scan">
+            <span class="btn-icon">📂</span>
+            <span data-i18n="btnCustomScan">Scan Specific Folder</span>
+          </button>
+        </div>
+
+        <!-- Live Scan Progress -->
+        <div class="progress-box" id="scan-progress-box" style="display: none;">
+          <div class="progress-header">
+            <span id="scan-progress-title" data-i18n="scanningNow">Scanning files in high-risk locations...</span>
+            <span id="scan-progress-counter">0 files</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar-animated" id="scan-progress-bar"></div>
+          </div>
+          <div class="current-file-text" id="scan-current-file">Preparing scan engine...</div>
+        </div>
+
+        <!-- Threats / Results Container -->
+        <div class="threats-container">
+          <div class="threats-header">
+            <h3 data-i18n="threatsFoundTitle">Scan Results</h3>
+            <span class="badge badge-clean" id="results-badge" data-i18n="badgeClean">Ready</span>
+          </div>
+          <div class="threats-list" id="threats-list">
+            <div class="empty-state">
+              <div class="empty-icon">✨</div>
+              <div class="empty-title" data-i18n="emptyScanTitle">Your PC is Protected</div>
+              <div class="empty-sub" data-i18n="emptyScanSub">Click Quick Scan to verify high-risk directories and startup locations.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: USB DOCTOR -->
+      <section id="tab-usb" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="usbTitle">USB Shortcut Virus Doctor</h2>
+            <p data-i18n="usbSubtitle">1-Click Shortcut Virus cleaner, hidden files recovery, and Autorun immunity.</p>
+          </div>
+          <button class="btn btn-sm btn-outline" id="btn-refresh-drives">
+            <span>🔄</span> <span data-i18n="btnRefresh">Refresh Drives</span>
+          </button>
+        </div>
+
+        <div class="usb-drive-selector-card">
+          <label class="input-label" data-i18n="selectUsbDrive">Select Removable USB Drive:</label>
+          <div class="drive-select-row">
+            <select id="usb-drive-select" class="custom-select">
+              <option value="" data-i18n="noUsbDetected">No USB drives detected. Insert USB drive and click Refresh.</option>
+            </select>
+          </div>
+          <div class="drive-details-row" id="usb-drive-details" style="display: none;">
+            <div class="detail-item"><strong data-i18n="driveLetter">Letter:</strong> <span id="usb-det-letter">E:</span></div>
+            <div class="detail-item"><strong data-i18n="driveLabel">Name:</strong> <span id="usb-det-label">Kingston</span></div>
+            <div class="detail-item"><strong data-i18n="driveFree">Free Space:</strong> <span id="usb-det-free">14.2 GB</span></div>
+          </div>
+        </div>
+
+        <div class="usb-action-cards">
+          <div class="action-card">
+            <div class="action-card-icon">🔍</div>
+            <h3 data-i18n="usbScanCardTitle">Audit USB Drive</h3>
+            <p data-i18n="usbScanCardDesc">Scans drive for malicious .lnk shortcuts, hidden VBS scripts, and suspicious autoruns.</p>
+            <button class="btn btn-secondary w-full" id="btn-scan-usb" data-i18n="btnScanUsb">Audit USB</button>
+          </div>
+          <div class="action-card action-card-primary">
+            <div class="action-card-icon">💉</div>
+            <h3 data-i18n="usbCleanCardTitle">Clean, Unhide & Immunize</h3>
+            <p data-i18n="usbCleanCardDesc">Kills shortcut virus scripts, restores all hidden files/folders, and locks autorun against reinfection.</p>
+            <button class="btn btn-primary w-full" id="btn-clean-usb" data-i18n="btnCleanUsb">Clean & Restore USB</button>
+          </div>
+        </div>
+
+        <div class="usb-results-container" id="usb-results-box" style="display: none;">
+          <h3 data-i18n="usbResultsTitle">USB Treatment Summary</h3>
+          <div class="usb-summary-grid">
+            <div class="summary-stat">
+              <span class="stat-number text-red" id="usb-stat-threats">0</span>
+              <span class="stat-label" data-i18n="statThreatsDeleted">Threats Removed</span>
+            </div>
+            <div class="summary-stat">
+              <span class="stat-number text-green" id="usb-stat-unhidden">100%</span>
+              <span class="stat-label" data-i18n="statFilesRestored">Files Unhidden</span>
+            </div>
+            <div class="summary-stat">
+              <span class="stat-number text-cyan" id="usb-stat-immunized">LOCKED</span>
+              <span class="stat-label" data-i18n="statImmunized">Autorun Shield</span>
+            </div>
+          </div>
+          <div class="alert-box alert-success" id="usb-status-message">
+            USB Drive cleaned and immunized successfully!
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: PROCESS HUNTER -->
+      <section id="tab-processes" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="processTitle">Live Process & Miner Hunter</h2>
+            <p data-i18n="processSubtitle">Audits running tasks for crypto-miners, rogue masquerading services, and hidden spyware.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-scan-processes">
+            <span>🕵️</span> <span data-i18n="btnAuditProcesses">Audit Processes Now</span>
+          </button>
+        </div>
+
+        <div class="process-hunter-container">
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="thProcess">Process</th>
+                  <th data-i18n="thPid">PID</th>
+                  <th data-i18n="thReason">Threat Indication</th>
+                  <th data-i18n="thSeverity">Severity</th>
+                  <th data-i18n="thAction">Action</th>
+                </tr>
+              </thead>
+              <tbody id="processes-tbody">
+                <tr>
+                  <td colspan="5" class="table-empty">
+                    <div class="empty-state">
+                      <div class="empty-icon">🕵️</div>
+                      <div class="empty-title" data-i18n="emptyProcessTitle">No Audits Run Yet</div>
+                      <div class="empty-sub" data-i18n="emptyProcessSub">Click "Audit Processes Now" to inspect active background execution trees.</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: NETWORK & HOSTS SHIELD -->
+      <section id="tab-network" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="networkTitle">System & Network Shield</h2>
+            <p data-i18n="networkSubtitle">Protect DNS resolvers and verify HOSTS file integrity against browser hijackers.</p>
+          </div>
+        </div>
+
+        <div class="network-cards-grid">
+          <!-- Hosts File Card -->
+          <div class="net-card">
+            <div class="net-card-header">
+              <span class="net-card-icon">🔒</span>
+              <div>
+                <h3 data-i18n="hostsTitle">Windows HOSTS File Integrity</h3>
+                <span class="badge badge-clean" id="hosts-status-badge">Protected</span>
+              </div>
+            </div>
+            <p class="net-card-desc" data-i18n="hostsDesc">Verifies that malware has not added fake redirects to intercept your search engines or block antivirus updates.</p>
+            <div class="net-card-metrics">
+              <div class="net-metric">
+                <span data-i18n="metricTotalEntries">Active Entries:</span>
+                <strong id="hosts-entries-count">0</strong>
+              </div>
+              <div class="net-metric">
+                <span data-i18n="metricSuspicious">Suspicious Redirects:</span>
+                <strong class="text-green" id="hosts-suspicious-count">0</strong>
+              </div>
+            </div>
+            <button class="btn btn-secondary w-full" id="btn-restore-hosts">
+              <span data-i18n="btnRestoreHosts">Restore Clean HOSTS File</span>
+            </button>
+          </div>
+
+          <!-- DNS Cache Card -->
+          <div class="net-card">
+            <div class="net-card-header">
+              <span class="net-card-icon">⚡</span>
+              <div>
+                <h3 data-i18n="dnsTitle">DNS Resolver & Cache</h3>
+                <span class="badge badge-clean" data-i18n="badgeOptimal">Optimal</span>
+              </div>
+            </div>
+            <p class="net-card-desc" data-i18n="dnsDesc">Flushes poisoned local DNS cache records and displays active network adapter DNS servers.</p>
+            <div class="dns-servers-list" id="dns-servers-list">
+              <div class="dns-item">Inspecting adapters...</div>
+            </div>
+            <button class="btn btn-primary w-full" id="btn-flush-dns">
+              <span data-i18n="btnFlushDns">Flush DNS Cache</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: ABOUT -->
+      <section id="tab-about" class="tab-pane">
+        <div class="about-card">
+          <img src="assets/icon.png" alt="TurboShield" class="about-logo">
+          <h2>TurboShield v1.0.0</h2>
+          <div class="about-badge">100% Free & Open Source Antivirus & Security Suite</div>
+          <div class="made-in-iraq-banner">
+            <span>صُنع بأيادي شباب عراقي</span> 🇮🇶
+          </div>
+          <p class="about-desc" data-i18n="aboutDescription">
+            Built as a modern, bloatware-free alternative to greedy commercial antivirus tools. TurboShield will never nag you for subscriptions, never display intrusive ad popups, and never slow down your gaming sessions.
+          </p>
+
+          <div class="about-features-grid">
+            <div class="about-feat">
+              <span class="feat-icon">🚫</span>
+              <strong>Zero Ads & No Upsells</strong>
+              <p>No fake scare alerts, no paid PRO licenses.</p>
+            </div>
+            <div class="about-feat">
+              <span class="feat-icon">💾</span>
+              <strong>USB Shortcut Virus Killer</strong>
+              <p>Restores hidden files & unmasks ransomware scripts.</p>
+            </div>
+            <div class="about-feat">
+              <span class="feat-icon">🕵️</span>
+              <strong>Silent Miner Hunter</strong>
+              <p>Detects rogue background crypto miners & trojans.</p>
+            </div>
+            <div class="about-feat">
+              <span class="feat-icon">🎮</span>
+              <strong>Gamer Friendly</strong>
+              <p>Consumes under 30 MB RAM with zero FPS impact.</p>
+            </div>
+          </div>
+
+          <div class="about-actions">
+            <button class="btn btn-outline" id="btn-open-github">
+              <span>⭐</span> <span data-i18n="viewOnGithub">View on GitHub (Open Source)</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
